@@ -2,42 +2,37 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
+        <img class="logo" src="../assets/e-bike.png" alt="roda&poa logo" />
+        <q-toolbar-title class="title"> Roda&Poa - {{ getTitle() }} </q-toolbar-title>
+
         <q-btn
+          v-if="currentRoute !== '/ListStations'"
+          @click="goToStations"
           flat
-          dense
           round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
-
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+          dense
+          icon="store"
+        >
+          <q-tooltip class="bg-indigo"> Estações </q-tooltip>
+        </q-btn>
+        <q-btn
+          v-if="currentRoute !== '/ListBikes'"
+          @click="goToBikes"
+          flat
+          round
+          dense
+          icon="electric_bike"
+        >
+          <q-tooltip class="bg-indigo"> Bikes </q-tooltip>
+        </q-btn>
+        <q-btn flat round dense icon="account_circle" @click="goToUserProfile">
+          <q-tooltip class="bg-indigo"> Perfil </q-tooltip>
+        </q-btn>
+        <q-btn @click="onLogOut" flat round dense icon="logout">
+          <q-tooltip class="bg-indigo"> Logout </q-tooltip>
+        </q-btn>
       </q-toolbar>
     </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
 
     <q-page-container>
       <router-view />
@@ -46,72 +41,54 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
-
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'MainLayout',
+  name: "MainLayout",
 
-  components: {
-    EssentialLink
-  },
+  components: {},
 
-  data () {
-    return {
-      linksList,
-      leftDrawerOpen: false
-    }
+  data() {},
+
+  computed: {
+    currentRoute() {
+      return this.$route.path;
+    },
   },
 
   methods: {
-    toggleLeftDrawer () {
-      this.leftDrawerOpen = !this.leftDrawerOpen
-    }
-  }
-})
+    onLogOut() {
+      this.$router.push("/");
+    },
+    goToStations() {
+      this.$router.push("/ListStations");
+    },
+    goToBikes() {
+      this.$router.push("/ListBikes");
+    },
+    goToUserProfile() {
+      this.$router.push("/UserProfile");
+    },
+    getTitle() {
+      if (this.currentRoute === "/ListBikes") {
+        return "Bikes Disponíveis";
+      } else if (this.currentRoute === "/ListStations") {
+        return "Estações Próximas";
+      } else {
+        return "Roda&Poa - Bikes Disponíveis";
+      }
+    },
+  },
+});
 </script>
+
+<style scooped>
+.logo {
+  width: 5rem;
+  margin-bottom: 1.25rem;
+}
+.title {
+  font-weight: 600;
+  font-size: 30px;
+}
+</style>

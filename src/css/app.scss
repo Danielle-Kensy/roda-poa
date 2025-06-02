@@ -1,1 +1,5 @@
 // app global css in SCSS form
+// @use './quasar.variables';
+  body {
+    font-family: $font-stack;
+  }
