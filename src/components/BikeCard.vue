@@ -6,13 +6,17 @@
 
     <q-card-actions vertical align="center">
       <q-btn flat @click="openModal">Alugar</q-btn>
+      <q-btn flat style="background: orange" @click="openEditModal" v-if="isAdmin">Editar</q-btn>
+      <q-btn flat style="background: red" @click="remove" v-if="isAdmin">Excluir</q-btn>
     </q-card-actions>
   </q-card>
+
+    <EditBikeModal v-model="showEditModal" :bike="bike" @edit="edit" />
 
   <q-dialog v-model="showModal">
     <q-card style="min-width: 40%">
       <q-chip square color="primary" text-color="white" icon="battery_5_bar">
-        Carga: <strong>{{ bike.charge }}</strong> km
+        Carga: <strong>{{ bike.quilometragem_carga }}</strong> km
       </q-chip>
 
       <q-card-section align="center">
@@ -21,7 +25,7 @@
 
       <q-card-section align="center">
         <q-chip square outline color="teal" text-color="white">
-          <strong>{{ bike.station }}</strong>
+          <strong>{{ bike.baia }}</strong>
         </q-chip>
         <q-chip square outline color="teal" text-color="white">
           <strong>Catraca: Nº {{ bike.turnstile }}</strong>
@@ -31,7 +35,7 @@
       <q-card-section align="center">
         <q-select
           color="black"
-          bg-color="primary"
+          bg-color="#E9EDF5"
           filled
           v-model="price"
           :options="options"
@@ -53,29 +57,44 @@
 </template>
 
 <script>
+import EditBikeModal from "./EditBikeModal.vue";
+
 export default {
   name: "BikeCard",
-  props: { bike: Object },
+  props: { bike: Object, isAdmin: Boolean },
+  components: {EditBikeModal},
 
   data() {
     return {
       showModal: false,
+      showEditModal: false,
       price: null,
       options: [
-        { label: "30min por R$ 15,00", value: 15 },
-        { label: "60min por R$ 25,00", value: 25 },
-        { label: "120min por R$ 35,00", value: 35 },
+        { label: "30min por R$ 15,00", value: 30 },
+        { label: "60min por R$ 25,00", value: 60 },
+        { label: "120min por R$ 35,00", value: 120 },
       ],
     };
   },
-  emits: ['rent'],
+  emits: ['rent', 'edit', 'remove'],
   methods: {
     openModal() {
       this.showModal = true;
     },
+    openEditModal() {
+      this.showEditModal = true;
+    },
     rent() {
       this.$emit('rent', this.bike)
       this.showModal = false;
+    },
+    edit(json) {
+      console.log(json)
+      this.$emit('edit', json)
+      this.showEditModal = false;
+    },
+    remove() {
+      this.$emit('remove', this.bike.id)
     },
   },
 };

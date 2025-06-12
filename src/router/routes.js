@@ -6,16 +6,19 @@ const routes = [
   {
     path: "/ListBikes",
     component: () => import("layouts/MainLayout.vue"),
+    meta: { requiresAuth: true },
     children: [{ path: "", component: () => import("pages/IndexPage.vue") }],
   },
   {
     path: "/ListStations",
     component: () => import("layouts/MainLayout.vue"),
+    meta: { requiresAuth: true },
     children: [{ path: "", component: () => import("pages/StationPage.vue") }],
   },
     {
     path: "/UserProfile",
     component: () => import("layouts/MainLayout.vue"),
+    meta: { requiresAuth: true },
     children: [{ path: "", component: () => import("pages/UserProfilePage.vue") }],
   },
   {

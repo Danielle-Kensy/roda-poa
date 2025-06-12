@@ -3,8 +3,12 @@
     <q-header elevated>
       <q-toolbar>
         <img class="logo" src="../assets/e-bike.png" alt="roda&poa logo" />
-        <q-toolbar-title class="title"> Roda&Poa - {{ getTitle() }} </q-toolbar-title>
-
+        <q-toolbar-title class="title" v-if="$q.screen.gt.xs">
+          Roda&Poa - {{ getTitle() }}
+        </q-toolbar-title>
+        <q-toolbar-title class="title" v-if="$q.screen.xs">
+          {{ getMobileTitle() }}
+        </q-toolbar-title>
         <q-btn
           v-if="currentRoute !== '/ListStations'"
           @click="goToStations"
@@ -42,22 +46,23 @@
 
 <script>
 import { defineComponent } from "vue";
+import { useQuasar } from "quasar";
 
 export default defineComponent({
   name: "MainLayout",
-
-  components: {},
-
-  data() {},
-
+  setup() {
+    const $q = useQuasar();
+    return { $q };
+  },
   computed: {
     currentRoute() {
       return this.$route.path;
     },
   },
-
   methods: {
     onLogOut() {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user_id");
       this.$router.push("/");
     },
     goToStations() {
@@ -75,7 +80,16 @@ export default defineComponent({
       } else if (this.currentRoute === "/ListStations") {
         return "Estações Próximas";
       } else {
-        return "Roda&Poa - Bikes Disponíveis";
+        return "Perfil";
+      }
+    },
+    getMobileTitle() {
+      if (this.currentRoute === "/ListBikes") {
+        return "Bikes";
+      } else if (this.currentRoute === "/ListStations") {
+        return "Estações";
+      } else {
+        return "Perfil";
       }
     },
   },

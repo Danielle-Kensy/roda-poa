@@ -40,6 +40,8 @@
 </template>
 
 <script>
+import { loginUser } from "src/api/users";
+
 export default {
   data() {
     return {
@@ -49,8 +51,22 @@ export default {
     };
   },
   methods: {
-    onSubmit() {
-      this.$router.push("/ListBikes");
+    async onSubmit() {
+      try {
+        const response = await loginUser({
+          username: this.mail,
+          password: this.password,
+        });
+        console.log("Login OK:", response);
+
+        this.$router.push("/ListBikes");
+      } catch (error) {
+        console.error("Erro no login:", error.response?.data || error.message);
+        this.$q.notify({
+          type: "negative",
+          message: "Login falhou. Verifique usuário e senha.",
+        });
+      }
     },
     onReset() {
       this.mail = null;
