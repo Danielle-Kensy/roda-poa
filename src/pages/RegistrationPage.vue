@@ -47,12 +47,22 @@
   	    <q-input
           v-model="password"
           filled
-          label="Senha"
+          :type="isPwd ? 'password' : 'text'"
+          label="Senha *"
           lazy-rules
           :rules="[
-            (val) => (val && val.length > 0) || 'Por favor, digite sua senha',
+            (val) => (val !== null && val !== '') || 'Por favor, digite sua senha',
+            (val) => (val && val.length > 6) || 'Senha muito curta',
           ]"
-        />
+        >
+          <template v-slot:append>
+            <q-icon
+              :name="isPwd ? 'visibility_off' : 'visibility'"
+              class="cursor-pointer"
+              @click="isPwd = !isPwd"
+            />
+          </template>
+        </q-input>
       </q-card-section>
       <q-card-actions align="center">
         <q-btn color="primary" label="Salvar Cadastro" @click="save" />
@@ -62,7 +72,6 @@
 </template>
 
 <script>
-
 export default {
   name: "RegistrationPage",
   data() {
@@ -73,14 +82,17 @@ export default {
       email: '',
       password: null,
       isSaving: false,
+      isPwd: true,
     };
   },
   methods: {
-     //aqui ficaria a requisição para o backend para editar os dados do user
-  },
+    onReset() {
+      this.password = null;
+      this.isPwd = true;
+    }
+  }
 };
 </script>
-
 <style scoped>
 .my-card {
   width: 60%;

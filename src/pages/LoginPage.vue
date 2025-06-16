@@ -35,9 +35,7 @@
           <q-btn label="Limpar" type="reset" color="red" flat class="q-ml-sm" />
         </div>
         <div>
-        <q-card-actions align="center">
           <q-btn label="Cadastrar-se" @click="goToRegister" color="primary" flat class="q-ml-sm"/>
-        </q-card-actions>
         </div>
       </q-form>
     </div>
