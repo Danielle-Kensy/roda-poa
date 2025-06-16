@@ -54,7 +54,7 @@
           color="black"
           bg-color="#E9EDF5"
           filled
-          v-model="turnstile"
+          v-model="catraca"
           :options="optionsTurnstile"
           label="Catracas Disponíveis"
           class="select"
@@ -100,7 +100,7 @@ export default {
         },
         { label: "Estação do Gasômetro", value: "Estação do Gasômetro" },
       ],
-      turnstile: null,
+      catraca: null,
       optionsTurnstile: [
         { label: "Nº 1", value: 1 },
         { label: "Nº 2", value: 2 },
@@ -121,7 +121,7 @@ export default {
       const json = {
         quilometragem_carga: this.quilometragem_carga.value,
         baia: this.baia.value,
-        turnstile: this.turnstile.value,
+        catraca: this.catraca.value,
         img: this.img,
       };
       this.$emit("create", json);

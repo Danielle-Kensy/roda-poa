@@ -6,12 +6,20 @@
 
     <q-card-actions vertical align="center">
       <q-btn flat @click="openModal">Alugar</q-btn>
-      <q-btn flat style="background: orange" @click="openEditModal" v-if="isAdmin">Editar</q-btn>
-      <q-btn flat style="background: red" @click="remove" v-if="isAdmin">Excluir</q-btn>
+      <q-btn
+        flat
+        style="background: orange"
+        @click="openEditModal"
+        v-if="isAdmin"
+        >Editar</q-btn
+      >
+      <q-btn flat style="background: red" @click="remove" v-if="isAdmin"
+        >Excluir</q-btn
+      >
     </q-card-actions>
   </q-card>
 
-    <EditBikeModal v-model="showEditModal" :bike="bike" @edit="edit" />
+  <EditBikeModal v-model="showEditModal" :bike="bike" @edit="edit" />
 
   <q-dialog v-model="showModal">
     <q-card style="min-width: 40%">
@@ -28,7 +36,10 @@
           <strong>{{ bike.baia }}</strong>
         </q-chip>
         <q-chip square outline color="teal" text-color="white">
-          <strong>Catraca: Nº {{ bike.turnstile }}</strong>
+          <strong>Status: {{ bike.status }}</strong>
+        </q-chip>
+        <q-chip square outline color="teal" text-color="white">
+          <strong>Catraca: Nº {{ bike.catraca }}</strong>
         </q-chip>
       </q-card-section>
 
@@ -37,7 +48,7 @@
           color="black"
           bg-color="#E9EDF5"
           filled
-          v-model="price"
+          v-model="minutes"
           :options="options"
           label="Tempo de Aluguel"
           class="select"
@@ -49,7 +60,7 @@
       </q-card-section>
 
       <q-card-actions align="center">
-        <q-btn flat label="Alugar" @click="rent"/>
+        <q-btn flat label="Alugar" @click="rent" />
         <q-btn outline label="Fechar" color="red" v-close-popup />
       </q-card-actions>
     </q-card>
@@ -62,13 +73,13 @@ import EditBikeModal from "./EditBikeModal.vue";
 export default {
   name: "BikeCard",
   props: { bike: Object, isAdmin: Boolean },
-  components: {EditBikeModal},
+  components: { EditBikeModal },
 
   data() {
     return {
       showModal: false,
       showEditModal: false,
-      price: null,
+      minutes: null,
       options: [
         { label: "30min por R$ 15,00", value: 30 },
         { label: "60min por R$ 25,00", value: 60 },
@@ -76,7 +87,7 @@ export default {
       ],
     };
   },
-  emits: ['rent', 'edit', 'remove'],
+  emits: ["rent", "edit", "remove"],
   methods: {
     openModal() {
       this.showModal = true;
@@ -85,16 +96,20 @@ export default {
       this.showEditModal = true;
     },
     rent() {
-      this.$emit('rent', this.bike)
+      const json = {
+        bicicleta_id: this.bike.id,
+        tempo_alugado_minutos: this.minutes.value,
+      };
+      this.$emit("rent", json);
       this.showModal = false;
     },
     edit(json) {
-      console.log(json)
-      this.$emit('edit', json)
+      console.log(json);
+      this.$emit("edit", json);
       this.showEditModal = false;
     },
     remove() {
-      this.$emit('remove', this.bike.id)
+      this.$emit("remove", this.bike.id);
     },
   },
 };

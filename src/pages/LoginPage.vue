@@ -6,9 +6,9 @@
         <q-input
           filled
           v-model="mail"
-          label="Email *"
+          label="Usuário ou Email *"
           lazy-rules
-          :rules="[(val) => (val && val.length > 0) || 'Insira seu email']"
+          :rules="[(val) => (val && val.length > 0) || 'Insira seu usuário ou email']"
         />
 
         <q-input

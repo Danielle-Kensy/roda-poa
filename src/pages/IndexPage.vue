@@ -24,13 +24,13 @@
     elevated
   >
     <q-scroll-area class="fit">
-      <h5>
+      <h5 style="margin: 30px 0 10px 0;">
         Bikes Ativa <span class="material-icons"> hourglass_bottom </span>
       </h5>
       <SlideBikeCard
-        v-for="bike in activeList"
-        :key="bike.id"
-        :bike="bike"
+        v-for="rent in activeList"
+        :key="rent.id"
+        :rent="rent"
         @remove="handleRemove"
       />
     </q-scroll-area>
@@ -55,6 +55,7 @@ import BikeCard from "../components/BikeCard.vue";
 import SlideBikeCard from "../components/SlideBikeCard.vue";
 import CreateBikeModal from "../components/CreateBikeModal.vue";
 import { getBikes, createBike, updateBike, deleteBike } from "src/api/bikes";
+import { getRents, createRent, updateRent } from "src/api/rent";
 
 export default defineComponent({
   name: "IndexPage",
@@ -79,30 +80,52 @@ export default defineComponent({
     try {
       const data = await getBikes(); // <-- chamada real à API
       this.bikes = data;
+      const dataRent = await getRents(); // <-- chamada real à API
+      const filterRent = dataRent.filter((rent) => rent.status !== "finalizado");
+      this.activeList = filterRent;
     } catch (err) {
       console.error("Erro ao buscar bikes:", err);
       this.$q.notify({
         type: "negative",
-        message: "Erro ao buscar bikes contate o suporte",
+        message: "Erro ao buscar bikes ou alugueis contate o suporte",
       });
     }
-    // try {
-    //   const data = await getRents(); // <-- chamada real à API
-    //   this.activeList = data;
-    // } catch (err) {
-    //   console.error("Erro ao buscar alugueis:", err);
-    //   this.$q.notify({
-    //     type: "negative",
-    //     message: "Erro ao buscar alugueis contate o suporte",
-    //   });
-    // }
   },
   methods: {
-    handleRent(bike) {
-      this.activeList.push(bike);
+    async handleRent(json) {
+      try {
+        const data = await createRent(json);
+        this.activeList.push(data);
+        this.$q.notify({
+          type: "positive",
+          message: "Bike alugada, acompanhe na lista de ativas!",
+        });
+      } catch (err) {
+        console.error("Erro ao criar o aluguel:", err);
+        this.$q.notify({
+          type: "negative",
+          message: err.response.data.message,
+        });
+      }
     },
-    handleRemove(id) {
-      this.activeList = this.activeList.filter((bike) => bike.id !== id);
+    async handleRemove(json) {
+      const data = {
+        catraca_retorno: json.catraca,
+      };
+      try {
+        await updateRent(json.id, data);
+        this.activeList = this.activeList.filter((rent) => rent.id !== json.id);
+        this.$q.notify({
+          type: "positive",
+          message: "Aluguel finalizado com sucesso!",
+        });
+      } catch (err) {
+        console.error("Erro ao finalizar o aluguel:", err);
+        this.$q.notify({
+          type: "negative",
+          message: err.response.data.message,
+        });
+      }
     },
     openModal() {
       this.showModal = true;
@@ -120,7 +143,7 @@ export default defineComponent({
         console.error("Erro ao criar o bicicleta:", err);
         this.$q.notify({
           type: "negative",
-          message: "Erro ao criar o bicicleta",
+          message: err.response.data.message,
         });
       }
     },
@@ -136,7 +159,7 @@ export default defineComponent({
         console.error("Erro ao excluir o bicicleta:", err);
         this.$q.notify({
           type: "negative",
-          message: "Erro ao excluir o bicicleta",
+          message: err.response.data.message,
         });
       }
     },
@@ -147,7 +170,7 @@ export default defineComponent({
           if (bike.id === json.id) {
             bike.quilometragem_carga = json.quilometragem_carga;
             bike.baia = json.baia;
-            bike.turnstile = json.turnstile;
+            bike.catraca = json.catraca;
             bike.img = json.img;
             bike.status = json.status;
           }
@@ -161,7 +184,7 @@ export default defineComponent({
         console.error("Erro ao atualizar o bicicleta:", err);
         this.$q.notify({
           type: "negative",
-          message: "Erro ao atualizar o bicicleta",
+          message: err.response.data.message,
         });
       }
     },

@@ -54,7 +54,7 @@
           color="black"
           bg-color="#E9EDF5"
           filled
-          v-model="turnstile"
+          v-model="catraca"
           :options="optionsTurnstile"
           label="Catracas Disponíveis"
           class="select"
@@ -116,7 +116,7 @@ export default {
         },
         { label: "Estação do Gasômetro", value: "Estação do Gasômetro" },
       ],
-      turnstile: this.bike.turnstile,
+      catraca: this.bike.catraca,
       optionsTurnstile: [
         { label: "Nº 1", value: 1 },
         { label: "Nº 2", value: 2 },
@@ -144,7 +144,7 @@ export default {
         id: this.bike.id,
         quilometragem_carga: this.quilometragem_carga.value ?? this.bike.quilometragem_carga,
         baia: this.baia.value ?? this.bike.baia,
-        turnstile: this.turnstile.value ?? this.bike.turnstile,
+        catraca: this.catraca.value ?? this.bike.catraca,
         status: this.status.value ?? this.bike.status,
         img: this.img ?? this.bike.img,
       };

@@ -10,7 +10,7 @@ export const createRent = async (data) => {
   return response.data;
 };
 
-export const updateRent = async (id, returnTurnstile) => {
-  const response = await api.put(`/alugueis/${id}/finalizar`, returnTurnstile);
+export const updateRent = async (id, returnCatraca) => {
+  const response = await api.put(`/alugueis/${id}/finalizar`, returnCatraca);
   return response.data;
 };
