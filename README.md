@@ -17,18 +17,14 @@ npm run dev
 ```
 
 
-### Lint the files
+### Login Admin
 ```bash
-yarn lint
-# or
-npm run lint
+user: admin
+password: password123
 ```
 
-
-### Build the app for production
+### Login User
 ```bash
-quasar build
+user: Dani
+password: 123456
 ```
-
-### Customize the configuration
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
