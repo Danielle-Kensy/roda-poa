@@ -74,6 +74,9 @@ export default defineComponent({
     goToUserProfile() {
       this.$router.push("/UserProfile");
     },
+      goToRegister() {
+      this.$router.push("/Cadastrar-se");
+    },
     getTitle() {
       if (this.currentRoute === "/ListBikes") {
         return "Bikes Disponíveis";

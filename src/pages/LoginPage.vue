@@ -34,6 +34,9 @@
           <q-btn label="Entrar" type="submit" color="primary" />
           <q-btn label="Limpar" type="reset" color="red" flat class="q-ml-sm" />
         </div>
+        <div>
+          <q-btn label="Cadastrar-se" @click="goToRegister" color="primary" flat class="q-ml-sm"/>
+        </div>
       </q-form>
     </div>
   </div>
@@ -73,7 +76,11 @@ export default {
       this.password = null;
       this.isPwd = true;
     },
-  },
+    goToRegister() {
+      // Redireciona para a rota da sua tela de cadastro
+      this.$router.push("/Cadastrar-se"); // Ou o nome da sua rota de cadastro, por exemplo: "/register"
+    }
+  }
 };
 </script>
 
